@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,23 +11,13 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
 
     public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findByUsername(username);
     }
 
     @Override
@@ -61,5 +49,4 @@ public class UserServiceImpl implements UserService {
     public List<User> listUsers() {
         return userRepository.findAll();
     }
-
 }

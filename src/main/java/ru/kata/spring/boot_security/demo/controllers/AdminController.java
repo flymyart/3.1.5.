@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,27 +11,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
+import ru.kata.spring.boot_security.demo.services.SecurityService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
-    private final RoleRepository roleRepository;
+    private final RoleServiceImpl roleService;
+    private final SecurityService securityService;
 
-    @Autowired
-    public AdminController(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService, RoleServiceImpl roleService, SecurityService securityService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
+        this.securityService = securityService;
     }
 
     @GetMapping()
-    public String admin(Model model) {
+    public String admin(Model model, Principal principal) {
         model.addAttribute("users", userService.listUsers());
+        model.addAttribute("user", securityService.findByUsername(principal.getName()));
         return "admin";
     }
 
@@ -45,7 +47,7 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newUser(Model model, @ModelAttribute("user") User user) {
-        model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("allRoles", roleService.findAll());
         return "new";
     }
 
@@ -58,7 +60,7 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.show(id));
-        model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("allRoles", roleService.findAll());
         return "edit";
     }
 
