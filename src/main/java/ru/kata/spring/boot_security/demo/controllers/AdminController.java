@@ -48,11 +48,11 @@ public class AdminController {
     @GetMapping("/new")
     public String newUser(Model model, @ModelAttribute("user") User user) {
         model.addAttribute("allRoles", roleService.findAll());
-        return "new";
+        return "redirect:/admin";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("newUser") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
