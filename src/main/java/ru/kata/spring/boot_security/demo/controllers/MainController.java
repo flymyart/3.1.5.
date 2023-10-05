@@ -12,7 +12,7 @@ public class MainController {
 
     @GetMapping
     public String getMainPage() {
-        return "index";
+        return "login";
     }
 
     @GetMapping("/login")

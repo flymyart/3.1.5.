@@ -33,9 +33,9 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String admin(Model model, Principal principal) {
+    public String admin(@ModelAttribute ("user") User user, Principal principal, Model model) {
         model.addAttribute("users", userService.listUsers());
-        model.addAttribute("user", securityService.findByUsername(principal.getName()));
+        model.addAttribute("authenticatedUser", securityService.findByUsername(principal.getName()));
         return "admin";
     }
 
@@ -51,7 +51,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     public String create(@ModelAttribute("newUser") User user) {
         userService.save(user);
         return "redirect:/admin";
