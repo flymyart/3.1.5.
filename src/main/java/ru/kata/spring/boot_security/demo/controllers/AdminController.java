@@ -34,34 +34,18 @@ public class AdminController {
 
     @GetMapping()
     public String admin(@ModelAttribute ("user") User user, Principal principal, Model model) {
+        User authenticatedUser = securityService.findByUsername(principal.getName());
         model.addAttribute("users", userService.listUsers());
-        model.addAttribute("authenticatedUser", securityService.findByUsername(principal.getName()));
-        return "admin";
-    }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("user", userService.show(id));
-        return "show";
-    }
-
-    @GetMapping("/new")
-    public String newUser(Model model, @ModelAttribute("user") User user) {
+        model.addAttribute("authenticatedUser", authenticatedUser);
+        model.addAttribute("roleOfAuthenticatedUser", authenticatedUser.getRoles());
         model.addAttribute("allRoles", roleService.findAll());
-        return "redirect:/admin";
+        return "admin";
     }
 
     @PostMapping("/create")
     public String create(@ModelAttribute("newUser") User user) {
         userService.save(user);
         return "redirect:/admin";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userService.show(id));
-        model.addAttribute("allRoles", roleService.findAll());
-        return "edit";
     }
 
     @PatchMapping("/{id}")
