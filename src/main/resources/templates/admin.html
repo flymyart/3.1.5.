@@ -16,12 +16,9 @@
            th:text="${authenticatedRole.getName().replace('ROLE_', '')}"></p>
     </div>
     <div class="text-muted mx-4 d-inline-block">
-        <a th:href="@{/logout}">Logout</a>
+        <a class="text-muted mx-4 text-decoration-none"  th:href="@{/logout}">Logout</a>
     </div>
 </nav>
-<!--<div sec:authorize="isAuthenticated()">-->
-<!--    This content is only shown to authenticated users.-->
-<!--</div>-->
 <div sec:authorize="hasRole('ROLE_ADMIN')">
 <!--    This content is only shown to administrators.-->
     <div class="d-flex align-items-start">

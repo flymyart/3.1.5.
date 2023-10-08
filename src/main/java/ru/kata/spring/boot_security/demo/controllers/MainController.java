@@ -23,4 +23,9 @@ public class MainController {
         }
         return "redirect:/";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "login";
+    }
 }

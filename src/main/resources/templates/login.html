@@ -9,12 +9,15 @@
 </head>
 <body>
 
-<div th:if="${param.logout}">
-    <p class="text-warning">You have been logged out.</p>
-</div>
+<!--<div th:if="${param.logout}">-->
+<!--    <p class="text-warning">You have been logged out.</p>-->
+<!--</div>-->
 
 <div class="mx-auto" style="width: 200px; margin-top: 3rem !important;">
     <h5><strong>Please sign in</strong></h5>
+<!--    <th:block th:if="${param.error}">-->
+<!--        <p>Invalid details</p>-->
+<!--    </th:block>-->
     <form th:action="@{/login}" method="post">
         <label for="username"></label>
         <input type="text" class="form-control" style="margin: -1.4rem 0" id="username" name="username"
