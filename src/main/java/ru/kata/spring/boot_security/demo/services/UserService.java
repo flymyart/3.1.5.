@@ -12,7 +12,7 @@ public interface UserService {
 
     void delete(int id);
 
-    User show(Integer id);
+    User show(int id);
 
     List<User> listUsers();
 }

@@ -52,9 +52,30 @@ public class User implements UserDetails{
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles ;
+    private List<Role> roles;
 
     public User() {
+    }
+
+    public User(int id, String username, @Email String email, String password, String name, String lastName, int age, List<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.roles = roles;
+    }
+
+    public User(String username, @Email String email, String password, String name, String lastName, int age, List<Role> roles) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.roles = roles;
     }
 
     public int getId() {
