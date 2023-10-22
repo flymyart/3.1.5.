@@ -10,10 +10,7 @@
 <body>
 <nav class="navbar fixed-top navbar-dark bg-dark d-flex justify-content-between">
     <div class="text-white pt-3 mx-4 d-inline-block">
-        <p class="d-inline-block" th:text="${user.getEmail()}"></p>
-        <p class="d-inline-block">with roles:</p>
-        <p class="d-inline-block" th:each="role : ${user.getRoles()} "
-           th:text="${role.getName().replace('ROLE_', '')}"></p>
+                <p class="d-inline-block" id="navbarUser"></p>
     </div>
     <div class="text-muted mx-4 d-inline-block">
         <a class="text-muted mx-4 text-decoration-none" th:href="@{/logout}">Logout</a>
@@ -46,17 +43,8 @@
                                 <th>Role</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <td th:text="${user.id}">Id</td>
-                            <td th:text="${user.username}">First Name</td>
-                            <td th:text="${user.name}">Last Name</td>
-                            <td th:text="${user.age}">Age</td>
-                            <td th:text="${user.email}">Email</td>
-                            <td>
-                                    <span th:each="role : ${user.getRoles()}"
-                                          th:text="${role.getName().replace('ROLE_', ' ') + ' '}">
-                                    </span>
-                            </td>
+                            <tbody id="tableUser">
+
                             </tbody>
                         </table>
                     </div>
@@ -71,5 +59,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/user.js"></script>
 </body>
 </html>

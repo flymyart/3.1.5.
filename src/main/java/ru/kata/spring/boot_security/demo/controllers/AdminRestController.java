@@ -15,6 +15,7 @@ import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.services.SecurityService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,11 @@ public class AdminRestController {
         this.securityService = securityService;
     }
 
+    @GetMapping("/showUser")
+    public ResponseEntity<User> showUser(Principal principal) {
+        return ResponseEntity.ok(securityService.findByUsername(principal.getName()));
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
@@ -42,9 +48,9 @@ public class AdminRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createNewUser(@RequestBody User user) {
-        userService.save(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<User> createNewUser(@RequestBody User newUser) {
+        userService.save(newUser);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
     @PutMapping
