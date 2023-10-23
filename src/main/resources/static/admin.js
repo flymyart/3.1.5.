@@ -16,7 +16,7 @@ fetch("http://localhost:8088/api/admin/showUser")
 function navbarAdmin(user) {
     navbarAdminInfo.innerHTML = `<span>${user.email}</span>
                                 <span>with roles:</span>
-                                <span>${rolesToString(user.roles)}</span>`
+                                <span>${user.roles.map(role=>role.name.substring(5))}</span>`
 }
 
 function showUser(user) {
@@ -28,7 +28,7 @@ function showUser(user) {
     <td>${user.name}</td>
     <td>${user.age}</td>
     <td>${user.email}</td>
-    <td>${rolesToString(user.roles)}</td>
+    <td>${user.roles.map(role=>role.name.substring(5))}</td>
     </tr>`;
     tableAdmin.innerHTML = dataOfUser;
 }
@@ -39,6 +39,30 @@ function rolesToString(roles) {
         rolesString += (el.name.toString().replace('ROLE_', ' ') + ' ');
     }
     return rolesString;
+}
+
+function rolesUser(event) {
+    let rolesAdmin = {};
+    let rolesUser = {};
+    let roles = [];
+    let allRoles = [];
+    let sel = document.querySelector(event);
+    for (let i = 0, n = sel.options.length; i < n; i++) {
+        if (sel.options[i].selected) {
+            roles.push(sel.options[i].value);
+        }
+    }
+    if (roles.includes('1')) {
+        rolesAdmin["id"] = 1;
+        rolesAdmin["name"] = "ROLE_ADMIN";
+        allRoles.push(rolesAdmin);
+    }
+    if (roles.includes('2')) {
+        rolesUser["id"] = 2;
+        rolesUser["name"] = "ROLE_USER";
+        allRoles.push(rolesUser);
+    }
+    return allRoles;
 }
 
 showAllUsers();
@@ -56,7 +80,7 @@ function showAllUsers() {
                     <td>${user.name}</td>
                     <td>${user.age}</td>
                     <td>${user.email}</td>
-                    <td>${rolesToString(user.roles)}</td>
+                    <td>${user.roles.map(role=>role.name.substring(5))}</td>
     
                     <td>
                         <button type="button" id="edit" class="btn btn-info" data-bs-toggle="modal"
@@ -79,30 +103,6 @@ function showAllUsers() {
 
 }
 
-function rolesUser(event) {
-    let rolesAdmin = {};
-    let rolesUser = {};
-    let roles = [];
-    let allRoles = [];
-    let sel = document.querySelector(event);
-    for (let i = 0, n = sel.options.length; i < n; i++) {
-        if (sel.options[i].selected) {
-            roles.push(sel.options[i].value);
-        }
-    }
-    if (roles.includes('1')) {
-        rolesAdmin["id"] = 1;
-        rolesAdmin["roleType"] = "ROLE_ADMIN";
-        allRoles.push(rolesAdmin);
-    }
-    if (roles.includes('2')) {
-        rolesUser["id"] = 2;
-        rolesUser["roleType"] = "ROLE_USER";
-        allRoles.push(rolesUser);
-    }
-    return allRoles;
-}
-
 let formNew = document.forms["formNew"];
 let usersTable = document.getElementById("usersTable");
 
@@ -112,10 +112,7 @@ function createUser() {
     formNew.addEventListener("submit", ev => {
         ev.preventDefault();
 
-        let rolesOfUser = [];
-
-
-        fetch("http://localhost:8088/api/admin/", {
+            fetch("http://localhost:8088/api/admin/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -136,6 +133,18 @@ function createUser() {
     });
 }
 
+function getRoles(list) {
+    let userRoles = [];
+    for (let role of list) {
+        if (role == 1 || role.id == 1) {
+            userRoles.push("ADMIN");
+        }
+        if (role == 2 || role.id == 2) {
+            userRoles.push("USER");
+        }
+    }
+    return userRoles.join(" , ");
+}
 
 function showDeleteModal(id) {
     document.getElementById('deleteClose').setAttribute('onclick', () => {
